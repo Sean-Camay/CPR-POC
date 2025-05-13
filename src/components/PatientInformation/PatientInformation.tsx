@@ -66,8 +66,15 @@ export const PatientInformation = () => {
   return (
     <div>
       {mockData && (
-        <div className='mb-4'>
+        <div className='mb-4 text-black'>
           <p>Loaded {mockData.patients.length} patients from mock data</p>
+          {mockData.patients.map((patient) => (
+            <div key={patient.id} className='mb-2'>
+              <h2 className='text-lg font-bold'>
+                {patient.firstName} {patient.lastName}
+              </h2>
+            </div>
+          ))}
         </div>
       )}
     </div>
