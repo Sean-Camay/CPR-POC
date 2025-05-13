@@ -1,0 +1,89 @@
+{
+  "patients": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "dateOfBirth": "1985-02-15",
+      "gender": "male",
+      "email": "john.doe@example.com",
+      "phone": "555-123-4567",
+      "address": {
+        "street": "123 Main St",
+        "city": "Springfield",
+        "state": "IL",
+        "zip": "62704"
+      }
+    },
+    {
+      "id": 2,
+      "firstName": "Mary",
+      "lastName": "Johnson",
+      "dateOfBirth": "1992-09-30",
+      "gender": "female",
+      "email": "mary.johnson@example.com",
+      "phone": "555-987-6543",
+      "address": {
+        "street": "456 Oak Ave",
+        "city": "Lincoln",
+        "state": "NE",
+        "zip": "68508"
+      }
+    }
+  ],
+  "doctors": [
+    {
+      "id": 1,
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "specialty": "Cardiology",
+      "email": "alice.smith@hospital.org",
+      "phone": "555-222-3333"
+    },
+    {
+      "id": 2,
+      "firstName": "Bob",
+      "lastName": "Williams",
+      "specialty": "Dermatology",
+      "email": "bob.williams@clinic.com",
+      "phone": "555-444-5555"
+    }
+  ],
+  "appointments": [
+    {
+      "id": 1,
+      "patientId": 1,
+      "doctorId": 2,
+      "dateTime": "2025-06-10T14:30:00Z",
+      "status": "scheduled",
+      "reason": "Annual skin check"
+    },
+    {
+      "id": 2,
+      "patientId": 2,
+      "doctorId": 1,
+      "dateTime": "2025-06-12T09:00:00Z",
+      "status": "completed",
+      "reason": "Follow-up on chest pain"
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": 1,
+      "patientId": 1,
+      "doctorId": 2,
+      "medication": "Hydrocortisone Cream",
+      "dosage": "Apply thin layer twice daily",
+      "startDate": "2025-05-01",
+      "endDate": "2025-05-14"
+    },
+    {
+      "id": 2,
+      "patientId": 2,
+      "doctorId": 1,
+      "medication": "Atorvastatin",
+      "dosage": "10 mg once daily",
+      "startDate": "2025-04-20"
+    }
+  ]
+}
