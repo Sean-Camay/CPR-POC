@@ -1,3 +1,9 @@
+import { ConsentForm } from '../../components/LegalConsentForm/ConsentForm'
+
 export const LegalConsentView = () => {
-  return <div>Legal Consent View</div>
+  return (
+    <div>
+      <ConsentForm />
+    </div>
+  )
 }
