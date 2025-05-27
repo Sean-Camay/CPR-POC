@@ -70,8 +70,10 @@ export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
         onChange={(e) => setConsentDate(e.target.value)}
         fullWidth
         margin='normal'
-        InputLabelProps={{
-          shrink: true,
+        sx={{
+          '& .MuiInputLabel-root': {
+            transform: 'translate(14px, -9px) scale(0.75)',
+          },
         }}
         required
       />
