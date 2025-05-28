@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 
-interface ConsentFormProps {
+export interface ConsentFormProps {
   onSubmit?: (data: {
     fullName: string
     consentDate: string
