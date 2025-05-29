@@ -1,4 +1,12 @@
-import { Alert, Box, Button, TextField, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { FormEvent, useState } from 'react'
 
 interface LoginProps {
@@ -8,6 +16,7 @@ interface LoginProps {
 export const Login = ({ onLogin }: LoginProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = (event: FormEvent) => {
@@ -62,6 +71,16 @@ export const Login = ({ onLogin }: LoginProps) => {
         fullWidth
         margin='normal'
         required
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={rememberMe}
+            onChange={(event) => setRememberMe(event.target.checked)}
+          />
+        }
+        label='Remember Me'
       />
 
       <Button
