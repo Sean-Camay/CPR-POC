@@ -1,11 +1,7 @@
 import { ReactNode, useState } from 'react'
 import { AuthContext } from '../../Context/AuthContext'
 
-export const AuthenticationContext = ({
-  children,
-}: {
-  children: ReactNode
-}) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [userData, setUserData] = useState<unknown | null>(null)
 
