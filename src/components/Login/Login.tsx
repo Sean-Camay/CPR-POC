@@ -42,9 +42,16 @@ export const Login = ({ onLogin }: LoginProps) => {
 
     try {
       const response = await axios.post<LoginResponse>(
-        'https://cprrestservcies.azurewebsites.net/api/swagger/ui',
-        { email, password }
+        'https://cprrestservcies.azurewebsites.net/api/swagger/ui'
       )
+
+      // Store keys in local storage if present
+      if (response.data.personalKey) {
+        localStorage.setItem('personalKey', response.data.personalKey)
+      }
+      if (response.data.medicalKey) {
+        localStorage.setItem('medicalKey', response.data.medicalKey)
+      }
 
       // I need to store these keys that are in the response on my device's vault or for now local storage
 
