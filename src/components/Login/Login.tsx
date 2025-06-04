@@ -40,10 +40,26 @@ export const Login = ({ onLogin }: LoginProps) => {
     onLogin?.(email, password)
     setLoading(true)
 
+    const headers = {
+      'Content-Type': 'application/json',
+    }
+
     try {
       const response = await axios.post<LoginResponse>(
-        'https://cprrestservcies.azurewebsites.net/api/swagger/ui'
+        'https://cprrestservcies.azurewebsites.net/api/Keys',
+        headers,
+        { auth: { username: email, password: password } }
       )
+
+      console.log('Response from API:', response)
+
+      const testResponse = await axios.post(
+        'https://cprrestservcies.azurewebsites.net/api/Keys',
+        headers,
+        { auth: { username: email, password: password } }
+      )
+
+      console.log('Test response:', testResponse)
 
       // Store keys in local storage if present
       if (response.data.personalKey) {
