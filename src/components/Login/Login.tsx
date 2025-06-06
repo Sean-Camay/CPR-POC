@@ -37,29 +37,25 @@ export const Login = ({ onLogin }: LoginProps) => {
       return
     }
     setError(null)
-    onLogin?.(email, password)
     setLoading(true)
 
-    const headers = {
-      'Content-Type': 'application/json',
-    }
+    // const headers = {
+    //   headers: { 'Content-Type': 'application/json' },
+    // }
+
+    // const payload = {
+    //   email,
+    //   password,
+    // }
 
     try {
       const response = await axios.post<LoginResponse>(
-        'https://cprrestservcies.azurewebsites.net/api/Keys',
-        headers,
-        { auth: { username: email, password: password } }
+        'https://cprrestservcies.azurewebsites.net/api/Keys'
+        // payload,
+        // headers
       )
 
       console.log('Response from API:', response)
-
-      const testResponse = await axios.post(
-        'https://cprrestservcies.azurewebsites.net/api/Keys',
-        headers,
-        { auth: { username: email, password: password } }
-      )
-
-      console.log('Test response:', testResponse)
 
       // Store keys in local storage if present
       if (response.data.personalKey) {
@@ -69,9 +65,7 @@ export const Login = ({ onLogin }: LoginProps) => {
         localStorage.setItem('medicalKey', response.data.medicalKey)
       }
 
-      // I need to store these keys that are in the response on my device's vault or for now local storage
-
-      console.log('Login response:', response)
+      // I need to store these keys that are in the response on my device's vault or for now, local storage
 
       const success = await login(email, password)
 
