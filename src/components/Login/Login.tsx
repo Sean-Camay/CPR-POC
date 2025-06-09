@@ -42,10 +42,17 @@ export const Login = ({ onLogin }: LoginProps) => {
     // in Azure create a B2C Tenent for Entra, make Darryl and I admins, create a secret, set up the secret in part of the login process
 
     try {
-      const response = await axios.post<LoginResponse>(
-        // 'https://cprrestservcies.azurewebsites.net/api/Keys'
-        'https://cprrestservcies.azurewebsites.net/api/Keys?code=XpuDdSNgNzPOw9SVhajs4VYh5_I6b-iFMzJs8UD1kx64AzFusSCRcA=='
-      )
+      const apiUrl =
+        import.meta.env.VITE_API_URL ||
+        'https://cprrestservcies.azurewebsites.net/api/Keys'
+      const apiKey = import.meta.env.VITE_API_KEY
+
+      let url = apiUrl
+      if (apiKey) {
+        url += `?code=${apiKey}`
+      }
+
+      const response = await axios.post<LoginResponse>(url)
 
       console.log('Response from API:', response)
 
