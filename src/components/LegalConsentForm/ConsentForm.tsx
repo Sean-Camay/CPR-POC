@@ -15,7 +15,7 @@ import {
   updateConsentGiven,
   submitConsentForm,
 } from '../../store/consentSlice'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export interface ConsentFormProps {
   onSubmit?: (data: {
