@@ -17,8 +17,8 @@ interface LoginProps {
 }
 
 interface LoginResponse {
-  personalKey?: string
-  medicalKey?: string
+  personalDataKey?: string
+  medicalDataKey?: string
 }
 
 export const Login = ({ onLogin }: LoginProps) => {
@@ -39,30 +39,22 @@ export const Login = ({ onLogin }: LoginProps) => {
     setError(null)
     setLoading(true)
 
-    // const headers = {
-    //   headers: { 'Content-Type': 'application/json' },
-    // }
-
-    // const payload = {
-    //   email,
-    //   password,
-    // }
+    // in Azure create a B2C Tenent for Entra, make Darryl and I admins, create a secret, set up the secret in part of the login process
 
     try {
       const response = await axios.post<LoginResponse>(
-        'https://cprrestservcies.azurewebsites.net/api/Keys'
-        // payload,
-        // headers
+        // 'https://cprrestservcies.azurewebsites.net/api/Keys'
+        'https://cprrestservcies.azurewebsites.net/api/Keys?code=XpuDdSNgNzPOw9SVhajs4VYh5_I6b-iFMzJs8UD1kx64AzFusSCRcA=='
       )
 
       console.log('Response from API:', response)
 
       // Store keys in local storage if present
-      if (response.data.personalKey) {
-        localStorage.setItem('personalKey', response.data.personalKey)
+      if (response.data.personalDataKey) {
+        localStorage.setItem('personalKey', response.data.personalDataKey)
       }
-      if (response.data.medicalKey) {
-        localStorage.setItem('medicalKey', response.data.medicalKey)
+      if (response.data.medicalDataKey) {
+        localStorage.setItem('medicalKey', response.data.medicalDataKey)
       }
 
       // I need to store these keys that are in the response on my device's vault or for now, local storage
