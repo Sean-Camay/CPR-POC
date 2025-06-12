@@ -74,6 +74,7 @@ export const Login = ({ onLogin }: LoginProps) => {
 
         // Redirect to main view after successful login
         navigate('/')
+        // navigate('/legal-consent')
       }
     } catch (error) {
       console.error('Login error:', error)

@@ -7,7 +7,15 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+  updateFullName,
+  updateConsentDate,
+  updateConsentGiven,
+  submitConsentForm,
+} from '../../store/consentSlice'
+import React, { useState } from 'react'
 
 export interface ConsentFormProps {
   onSubmit?: (data: {
@@ -18,10 +26,31 @@ export interface ConsentFormProps {
 }
 
 export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
-  const [fullName, setFullName] = useState('')
-  const [consentDate, setConsentDate] = useState('')
-  const [consentGiven, setConsentGiven] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  // get consent state from Redux store
+  const { fullName, consentDate, consentGiven } = useAppSelector(
+    (state) => state.consent
+  )
+
+  const handleFullNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateFullName(event.target.value))
+  }
+
+  const handleConsentDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(updateConsentDate(event.target.value))
+  }
+
+  const handleConsentGivenChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(updateConsentGiven(event.target.checked))
+  }
 
   const submitForm = (event: React.FormEvent) => {
     event.preventDefault()
@@ -30,11 +59,21 @@ export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
       return
     }
     setError(null)
+
+    dispatch(
+      submitConsentForm({
+        fullName,
+        consentDate,
+        consentGiven,
+      })
+    )
     onSubmit?.({
       fullName,
       consentDate,
       consentGiven,
     })
+
+    navigate('/')
   }
 
   return (
@@ -57,7 +96,7 @@ export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
       <TextField
         label='Full Name'
         value={fullName}
-        onChange={(e) => setFullName(e.target.value)}
+        onChange={handleFullNameChange}
         fullWidth
         margin='normal'
         required
@@ -67,7 +106,7 @@ export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
         label='Date'
         type='date'
         value={consentDate}
-        onChange={(e) => setConsentDate(e.target.value)}
+        onChange={handleConsentDateChange}
         fullWidth
         margin='normal'
         sx={{
@@ -82,7 +121,7 @@ export const ConsentForm = ({ onSubmit }: ConsentFormProps) => {
         control={
           <Checkbox
             checked={consentGiven}
-            onChange={(e) => setConsentGiven(e.target.checked)}
+            onChange={handleConsentGivenChange}
           />
         }
         label='I hereby consent to the collection and use of my health information for the purposes described.'
