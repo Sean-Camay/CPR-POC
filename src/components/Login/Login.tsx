@@ -27,6 +27,7 @@ export const Login = ({ onLogin }: LoginProps) => {
   const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
   const navigate = useNavigate()
   const { login } = useAuth()
 
