@@ -1,18 +1,22 @@
-import { ReactNode, useState } from 'react'
+import { useMsal } from '@azure/msal-react'
+import { ReactNode, useState, useEffect } from 'react'
+import { loginRequest } from '../../authConfig'
 import { AuthContext } from '../../Context/AuthContext'
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userData, setUserData] = useState<unknown | null>(null)
+  const { instance, accounts } = useMsal()
+  const [isAuthenticated, setIsAuthenticated] = useState(accounts.length > 0)
+  const [userData, setUserData] = useState<unknown | null>(accounts[0] || null)
 
-  const login = async (email: string, password: string) => {
+  useEffect(() => {
+    setIsAuthenticated(accounts.length > 0)
+    setUserData(accounts[0] || null)
+  }, [accounts])
+
+  const login = async () => {
     try {
-      if (email && password) {
-        setIsAuthenticated(true)
-        setUserData({ email }) // Simulate user data
-        return true
-      }
-      return false
+      await instance.loginPopup(loginRequest)
+      return true
     } catch (error) {
       console.error('Login failed:', error)
       return false
@@ -20,8 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const logout = () => {
-    setIsAuthenticated(false)
-    setUserData(null)
+    instance.logout()
   }
 
   return (
@@ -30,5 +33,3 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     </AuthContext.Provider>
   )
 }
-
-// useAuth hook has been moved to useAuth.ts
