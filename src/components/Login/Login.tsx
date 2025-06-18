@@ -1,19 +1,11 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Alert, Box, Button, Typography } from '@mui/material'
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../CustomHooks/useAuth'
 
 interface LoginProps {
-  onLogin?: (username: string, password: string) => void
+  onLogin?: (username: string) => void
 }
 
 interface LoginResponse {
@@ -22,9 +14,9 @@ interface LoginResponse {
 }
 
 export const Login = ({ onLogin }: LoginProps) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
+  // const [email, setEmail] = useState('')
+  // const [password, setPassword] = useState('')
+  // const [rememberMe, setRememberMe] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -33,16 +25,24 @@ export const Login = ({ onLogin }: LoginProps) => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    if (!email || !password) {
-      setError('Please fill in both fields.')
-      return
-    }
+    // if (!email || !password) {
+    //   setError('Please fill in both fields.')
+    //   return
+    // }
     setError(null)
     setLoading(true)
 
     // in Azure create a B2C Tenent for Entra, make Darryl and I admins, create a secret, set up the secret in part of the login process
 
     try {
+      // Trigger Azure B2C login flow
+      const success = await login()
+
+      if (success) {
+        onLogin?.('user@example.com')
+        navigate('/')
+        // navigate('/legal-consent')
+      }
       const apiUrl =
         import.meta.env.VITE_API_URL ||
         'https://cprrestservcies.azurewebsites.net/api/Keys'
@@ -57,25 +57,13 @@ export const Login = ({ onLogin }: LoginProps) => {
 
       console.log('Response from API:', response)
 
+      // I need to store these keys that are in the response on my device's vault or for now, local storage
       // Store keys in local storage if present
       if (response.data.personalDataKey) {
         localStorage.setItem('personalKey', response.data.personalDataKey)
       }
       if (response.data.medicalDataKey) {
         localStorage.setItem('medicalKey', response.data.medicalDataKey)
-      }
-
-      // I need to store these keys that are in the response on my device's vault or for now, local storage
-
-      const success = await login(email, password)
-
-      if (success) {
-        // Call onLogin callback if provided
-        onLogin?.(email, password)
-
-        // Redirect to main view after successful login
-        navigate('/')
-        // navigate('/legal-consent')
       }
     } catch (error) {
       console.error('Login error:', error)
@@ -113,7 +101,7 @@ export const Login = ({ onLogin }: LoginProps) => {
         </Alert>
       )}
 
-      <TextField
+      {/* <TextField
         label='Email Address'
         type='email'
         value={email}
@@ -141,7 +129,7 @@ export const Login = ({ onLogin }: LoginProps) => {
           />
         }
         label='Remember Me'
-      />
+      /> */}
 
       <Button
         type='submit'
@@ -149,8 +137,9 @@ export const Login = ({ onLogin }: LoginProps) => {
         color='primary'
         fullWidth
         sx={{ mt: 3 }}
+        disabled={loading}
       >
-        {loading ? 'Signing in...' : 'Sign In'}
+        {loading ? 'Signing in...' : 'Sign in with Azure B2C'}
       </Button>
     </Box>
   )
