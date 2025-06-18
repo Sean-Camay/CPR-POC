@@ -4,10 +4,18 @@ import { AuthError, InteractionRequiredAuthError } from '@azure/msal-browser'
 import { loginRequest } from '../../authConfig'
 import { AuthContext } from '../../Context/AuthContext'
 
+interface UserData {
+  name?: string
+  username?: string
+  email?: string
+  idTokenClaims?: Record<string, unknown>
+  [key: string]: unknown
+}
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { instance, accounts } = useMsal()
   const [isAuthenticated, setIsAuthenticated] = useState(accounts.length > 0)
-  const [userData, setUserData] = useState<unknown | null>(accounts[0] || null)
+  const [userData, setUserData] = useState<UserData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
