@@ -32,7 +32,7 @@ export const Login = ({ onLogin }: LoginProps) => {
     setError(null)
     setLoading(true)
 
-    // in Azure create a B2C Tenent for Entra, make Darryl and I admins, create a secret, set up the secret in part of the login process
+    // in Azure create a B2C tenant for Entra, make Darryl and I admins, create a secret, set up the secret in part of the login process
 
     try {
       // Trigger Azure B2C login flow
