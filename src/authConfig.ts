@@ -2,12 +2,10 @@ import { Configuration, LogLevel } from '@azure/msal-browser'
 
 export const msalConfig: Configuration = {
   auth: {
-    clientId: 'dfc0d61c-691e-4c78-a193-cf8c8ea75c16', // Replace with your Azure AD app client ID
+    clientId: 'dfc0d61c-691e-4c78-a193-cf8c8ea75c16', // Application (client) ID from Azure portal
     authority:
-      'https://ed20081e-9387-41f1-9929-a839e35a86a8.b2clogin.com/ed20081e-9387-41f1-9929-a839e35a86a8.onmicrosoft.com/YOUR_SIGNIN_POLICY',
-    knownAuthorities: ['ed20081e-9387-41f1-9929-a839e35a86a8.b2clogin.com'], // Replace with your tenant name
-    redirectUri: window.location.origin, // The redirect URI registered in Azure AD
-    postLogoutRedirectUri: window.location.origin, // The URI to redirect to after logout
+      'https://login.microsoftonline.com/ed20081e-9387-41f1-9929-a839e35a86a8', // Directory (tenant) ID
+    redirectUri: 'http://localhost:51170', // Your app's redirect URI
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
