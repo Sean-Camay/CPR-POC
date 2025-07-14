@@ -1,4 +1,17 @@
-import { Alert, Box, Button, Typography } from '@mui/material'
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+} from '@mui/material'
+import LoginIcon from '@mui/icons-material/Login'
+import LogoutIcon from '@mui/icons-material/Logout'
+import LockOutlineIcon from '@mui/icons-material/LockOutline'
+import PersonIcon from '@mui/icons-material/Person'
 import axios from 'axios'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -87,20 +100,70 @@ export const Login = ({ onLogin }: LoginProps) => {
 
   return (
     <>
-      <div className='card'>
-        <section className='auth'>
+      {/* Darryl's */}
+      {/* Converted to Material UI components */}
+      <Card
+        sx={{
+          maxWidth: 400,
+          mx: 'auto',
+          mb: 4,
+          boxShadow: 2,
+          borderRadius: 2,
+        }}
+      >
+        <CardContent>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mb: 2,
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+              {!isAuthenticated ? <LockOutlineIcon /> : <PersonIcon />}
+            </Avatar>
+            <Typography component='h2' variant='h6'>
+              {!isAuthenticated ? 'Azure AD Authentication' : 'Welcome'}
+            </Typography>
+          </Box>
+
           {!isAuthenticated && instance ? (
-            <div className='login'>
-              <button onClick={handleLogin}>Login</button>
-            </div>
+            <Button
+              startIcon={<LoginIcon />}
+              variant='contained'
+              fullWidth
+              onClick={handleLogin}
+              sx={{ mt: 2 }}
+            >
+              Sign in with Azure AD
+            </Button>
           ) : (
-            <div className='logout'>
-              <button onClick={handleLogout}>Logout</button>
-              <div>Welcome, {accounts[0].username}</div>
-            </div>
+            <Box>
+              <Typography variant='body1' sx={{ mb: 2, textAlign: 'center' }}>
+                Signed in as: <strong>{accounts[0]?.username || 'User'}</strong>
+              </Typography>
+              <Button
+                startIcon={<LogoutIcon />}
+                variant='outlined'
+                color='secondary'
+                fullWidth
+                onClick={handleLogout}
+              >
+                Sign out
+              </Button>
+            </Box>
           )}
-        </section>
-      </div>
+        </CardContent>
+      </Card>
+
+      <Divider sx={{ my: 4 }}>
+        <Typography variant='body2' color='text.secondary'>
+          OR
+        </Typography>
+      </Divider>
+
+      {/* Mine */}
       <Box
         component='form'
         onSubmit={handleSubmit}
