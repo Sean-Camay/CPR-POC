@@ -56,7 +56,6 @@ export const Login = ({ onLogin }: LoginProps) => {
     setLoading(true)
 
     try {
-      // Trigger Azure B2C login flow
       const success = await login()
 
       if (success) {
