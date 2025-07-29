@@ -1,0 +1,38 @@
+trigger:
+  branches:
+    include:
+      - main # or your default branch
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  # 1) Install Node.js
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.x'
+    displayName: 'Install Node.js'
+
+  # 2) Install deps & build
+  - script: |
+      npm ci
+      npm run build
+    displayName: 'npm install & build'
+
+  # 3) Package the build output
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: 'dist' # or 'dist' if you're using Vite
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
+      verbose: true
+
+  # 4) Deploy to Azure App Service
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'Azure-SPN' # your service connection
+      appType: 'webAppLinux' # or 'webApp' for Windows
+      appName: 'my-reactclient' # your App Service name
+      package: '$(Build.ArtifactStagingDirectory)/site.zip'
+    displayName: 'Deploy to Azure App Service'
