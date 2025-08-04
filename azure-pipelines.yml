@@ -3,36 +3,64 @@ trigger:
     include:
       - main # or your default branch
 
+variables:
+  # === Update these to match your environment ===
+  azureSubscription: 'Azure-SPN' # Your Service Connection name in ADO
+  resourceGroup: 'reactclient-rg' # RG where you want to host
+  location: 'CentralUS' # Azure region (e.g. eastus, westus2, etc.)
+  appServicePlan: 'reactclient-asp' # Name for the App Service Plan
+  webAppName: 'reactclient-app' # Global-unique Web App name
+  sku: 'B1' # Pricing tier (F1, B1, P1v2, etc.)
+
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  # 1) Install Node.js
+  # 1. Install Node.js
   - task: NodeTool@0
     inputs:
       versionSpec: '16.x'
     displayName: 'Install Node.js'
 
-  # 2) Install deps & build
+  # 2. Build your React app
   - script: |
       npm ci
-      npm run build
+      npm run build          # output goes into `build/`
+    workingDirectory: $(Build.SourcesDirectory)
     displayName: 'npm install & build'
 
-  # 3) Package the build output
-  - task: ArchiveFiles@2
+  # 3. Provision Azure resources if they don't exist
+  - task: AzureCLI@2
+    displayName: 'Provision Azure resources'
     inputs:
-      rootFolderOrFile: 'dist' # or 'dist' if you're using Vite
-      includeRootFolder: false
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
-      verbose: true
+      azureSubscription: $(azureSubscription)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        # Create resource group
+        az group create \
+          --name $(resourceGroup) \
+          --location $(location)
 
-  # 4) Deploy to Azure App Service
+        # Create App Service Plan (Linux)
+        az appservice plan create \
+          --name $(appServicePlan) \
+          --resource-group $(resourceGroup) \
+          --sku $(sku) \
+          --is-linux
+
+        # Create Web App (Linux, Node runtime)
+        az webapp create \
+          --name $(webAppName) \
+          --resource-group $(resourceGroup) \
+          --plan $(appServicePlan) \
+          --runtime "NODE|16-lts"
+
+  # 4. Deploy the build folder to your Web App
   - task: AzureWebApp@1
+    displayName: 'Deploy to Azure Web App'
     inputs:
-      azureSubscription: 'Azure-SPN' # your service connection
-      appType: 'webAppLinux' # or 'webApp' for Windows
-      appName: 'my-reactclient' # your App Service name
-      package: '$(Build.ArtifactStagingDirectory)/site.zip'
-    displayName: 'Deploy to Azure App Service'
+      azureSubscription: $(azureSubscription)
+      appType: 'webAppLinux'
+      appName: $(webAppName)
+      package: '$(Build.SourcesDirectory)/build'
