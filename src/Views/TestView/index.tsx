@@ -17,6 +17,23 @@ export const TestView = ({ title }: TestViewProps) => {
   const [people, setPeople] = useState<Person[]>([])
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts/1'
+        )
+        console.log('Data fetched:', response.data)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      } finally {
+        // Cleanup or final actions can be performed here
+      }
+    }
+
+    getData()
+  }, [count])
+
+  useEffect(() => {
     const getPeople = async () => {
       try {
         const response = await axios.get(
@@ -24,6 +41,7 @@ export const TestView = ({ title }: TestViewProps) => {
         )
 
         setPeople(response.data)
+        setPeople((prevPeo) => [...prevPeo, ...response.data])
 
         console.log('People:', response.data)
       } catch (error) {
