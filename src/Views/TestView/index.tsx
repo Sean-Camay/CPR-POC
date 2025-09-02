@@ -31,7 +31,7 @@ export const TestView = ({ title }: TestViewProps) => {
     }
 
     getData()
-  }, [count])
+  }, [])
 
   useEffect(() => {
     const getPeople = async () => {
@@ -41,7 +41,6 @@ export const TestView = ({ title }: TestViewProps) => {
         )
 
         setPeople(response.data)
-        setPeople((prevPeo) => [...prevPeo, ...response.data])
 
         console.log('People:', response.data)
       } catch (error) {
@@ -52,11 +51,16 @@ export const TestView = ({ title }: TestViewProps) => {
     getPeople()
   }, [])
 
+  const decrementCount = () => {
+    setCount(count - 1)
+  }
+
   return (
     <div>
       <h1>{title ? title : 'Test View'}</h1>
       <p>Count: {count}</p>
       <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={decrementCount}>Decrement</button>
 
       <ul>
         {people.map((person) => (

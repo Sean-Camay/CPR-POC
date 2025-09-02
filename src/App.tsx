@@ -4,6 +4,7 @@ import { MainView } from './Views/Main-View'
 import { LegalConsentView } from './Views/LegalConsent'
 import { LoginView } from './Views/Login'
 import { PrivateRoute } from './components/PrivateRoute/PrivateRoute'
+import { TestView } from './Views/TestView'
 import './App.css'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           }
         />
         <Route path='/legal-consent' element={<LegalConsentView />} />
+        <Route path='/test' element={<TestView />} />
       </Routes>
     </AuthProvider>
   )
